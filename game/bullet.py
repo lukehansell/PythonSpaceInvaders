@@ -1,16 +1,14 @@
-from game.game_object import GameObject
 from lib import relative_path
 import pygame
 
-class Bullet(GameObject):
-    def __init__(self, position_x, position_y):
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, pos):
         image_file = relative_path(__file__, '../assets/lazer.png')
-        image = pygame.image.load(image_file)
-
-        super().__init__(position_x, position_y, 10, 3, image)
+        pygame.sprite.Sprite.__init__(self, self.containers)
+        self.image = pygame.image.load(image_file)
+        self.rect = self.image.get_rect(midbottom=pos)
 
     def update(self):
-        self.position.y -= 1
-
-    def is_off_screen(self):
-        return self.position.y + self.height <= 0
+        self.rect.move_ip(0, -3)
+        if self.rect.bottom <= 0:
+            self.kill()
